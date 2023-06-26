@@ -1,30 +1,29 @@
-
-import {userState}  from "react";
+import { useEffect, useState } from "react";
+import { faker } from "@faker-js/faker";
+import Notes from "./components/Notes";
+import { Container } from "@mantine/core";
+// import Search from "./components/Search";
 
 function App() {
-  const [notes, setNotes] = userState([
-    {
-      title:  "Shopping",
-      text: "Buy milk!"
-    },
-    {
-      title: "Study",
-      text: "Review react notes"
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    const fakeNotes = [];
+    for (let index = 0; index < 10; index++) {
+      fakeNotes.push({
+        id: faker.datatype.uuid(),
+        title: faker.lorem.sentence(),
+        text: faker.lorem.paragraph(),
+      });
     }
-  ]);
+    setNotes(fakeNotes);
+  }, []);
 
   return (
-    <>
-      {
-        notes.map(note => (
-          <div>
-            <p>{note.title}</p>
-            <p>{note.text}</p>
-          </div>
-        ))
-      }
-    </>
-  )
+    <Container>
+      <Notes notes={notes} />
+    </Container>
+  );
 }
 
 export default App;
