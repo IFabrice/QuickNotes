@@ -2,9 +2,17 @@ import { Container } from "@mantine/core";
 import Notes from "../components/Notes";
 import Header from "../components/Header";
 import PropTypes from "prop-types";
+import Debug from "debug";
+import { useEffect } from "react";
+
+const debug = new Debug("MyApp:pages:Home.jsx");
 
 function Home(props) {
   const { notes, query, setQuery, add, remove } = props;
+
+  useEffect(() => {
+    debug("Home page is loaded!");
+  }, []);
 
   return (
     <Container>
@@ -16,7 +24,7 @@ function Home(props) {
 
 export default Home;
 
-Header.propTypes = {
+Home.propTypes = {
   query: PropTypes.string.isRequired,
   setQuery: PropTypes.func.isRequired,
   add: PropTypes.func.isRequired,

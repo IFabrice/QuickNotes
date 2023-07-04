@@ -1,36 +1,33 @@
 import { Button, Container, Group, Stack } from "@mantine/core";
 import { TextInput, Textarea } from "@mantine/core";
+import { RichTextEditor } from "@mantine/rte";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate, useLocation } from "react-router-dom";
 
-
 function Edit(props) {
-  const { edit, remove} = props;
+  const { edit, remove } = props;
   const navigate = useNavigate();
   const location = useLocation();
-  const   
-  const { id, text: _text, title: _title, mode } = location.state;
 
+  const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [mode, setMode] = useState("");
 
   useEffect(() => {
-    if (_text !== text) {
-      setText(_text);
+    if (location.state === null) {
+      navigate("/", { replace: true });
+    } else {
+      location.state.id !== id && setId(location.state.id);
+      location.state.title !== title && setTitle(location.state.title);
+      location.state.text !== text && setText(location.state.text);
+      location.state.mode !== mode && setMode(location.state.mode);
     }
-
-    if (_title !== title) {
-      setTitle(_title);
-    }
-  }, [_text, _title]);
+  }, [location.state]);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
-  };
-
-  const handleTextChange = (event) => {
-    setText(event.target.value);
   };
 
   const handleSave = () => {
@@ -39,9 +36,13 @@ function Edit(props) {
   };
 
   const handleCancel = () => {
-    if (mode === "remove-on-cancel") {
+    console.log("cancel");
+
+    if (mode == "remove-on-cancel") {
+      // Remove the note if canceled
       remove(id);
     }
+
     navigate("/", { replace: true });
   };
 
@@ -55,15 +56,14 @@ function Edit(props) {
           value={title}
           onChange={handleTitleChange}
         />
-        <Textarea
-          placeholder="Your note's text"
-          label="Text"
-          withAsterisk
-          autosize
-          minRows={5}
+
+        <RichTextEditor
+          id="rte"
+          defaultValue={"Your note's text"}
           value={text}
-          onChange={handleTextChange}
+          onChange={setText}
         />
+
         <Group position="center" spacing="xl" grow>
           <Button variant="subtle" onClick={handleCancel}>
             Cancel
@@ -80,6 +80,6 @@ function Edit(props) {
 export default Edit;
 
 Edit.propTypes = {
-  edit: PropTypes.func,
+  edit: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
-}; 
+};

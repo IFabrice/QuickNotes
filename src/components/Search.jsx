@@ -1,6 +1,7 @@
 import { Input } from "@mantine/core";
-import { IconSearch } from "@tabler/icons";
+// import { IconSearch } from "@tabler/icons";
 import PropTypes from "prop-types";
+import { FaSearch } from "react-icons/fa";
 
 function Search(props) {
   const { query, setQuery } = props;
@@ -11,7 +12,7 @@ function Search(props) {
 
   return (
     <Input
-      icon={<IconSearch />}
+      icon={<FaSearch />}
       placeholder="Your search query"
       value={query}
       onChange={handleOnChange}
